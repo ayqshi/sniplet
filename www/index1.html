@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<title>sniplit</title>
+<meta name="theme-color" content="#070707">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="sniplit">
+<meta name="description" content="Stream. Search. Explore. Music, lyrics, video, radio and podcasts in one uncluttered player.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="preconnect" href="https://itunes.apple.com"><link rel="preconnect" href="https://is1-ssl.mzstatic.com"><link rel="preconnect" href="https://api.deezer.com"><link rel="preconnect" href="https://lrclib.net"><link rel="dns-prefetch" href="https://cdns-images.dzcdn.net"><link rel="dns-prefetch" href="https://i.ytimg.com"><link rel="dns-prefetch" href="https://api.audius.co">
+<link rel="stylesheet" href="app.css">
+</head>
+<body class="mono">
+<div class="wco" aria-hidden="true"><b>sniplit</b></div>
+<div id="app">
+  <aside id="side"></aside>
+  <header id="topbar"></header>
+  <main id="main"><div id="view"></div></main>
+  <footer id="mini" class="hide"></footer>
+  <nav id="tabs"></nav>
+</div>
+<section id="np" aria-label="Now playing"></section>
+<div id="scrim"></div>
+<div id="sheet" role="dialog"></div>
+<section id="story" aria-label="Story"></section>
+<div id="yt-park" style="position:fixed;left:-9999px;top:0;width:10px;height:10px"></div>
+<script src="lib/zip.js"></script>
+<script src="lib/icons.js"></script>
+<script src="lib/audio.js"></script>
+<script src="lib/lyrics.js"></script>
+<script src="lib/data.js"></script>
+<script src="lib/sources.js"></script>
+<script src="lib/import.js"></script>
+<script src="lib/social.js"></script>
+<script src="lib/legal.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
