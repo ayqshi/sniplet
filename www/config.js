@@ -1,0 +1,3 @@
+window.SNIPLIT_SERVER="";
+window.SNIPLIT_GOATCOUNTER="";
+window.SNIPLIT_LICENSE_KEY=null;
