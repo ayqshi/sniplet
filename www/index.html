@@ -30,8 +30,20 @@
 <meta name="twitter:image:alt" content="sniplit — Stream. Search. Explore.">
 <link rel="sitemap" type="application/xml" href="sitemap.xml"><link rel="preconnect" href="https://itunes.apple.com"><link rel="dns-prefetch" href="https://lrclib.net"><link rel="dns-prefetch" href="https://api.deezer.com"><link rel="dns-prefetch" href="https://www.youtube.com">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"sniplit","url":"https://ayqshi.github.io/sniplet/www/index.html","applicationCategory":"MultimediaApplication","applicationSubCategory":"Music player","operatingSystem":"Web, Android, Windows, macOS, iOS (web app)","description":"Free music app with synced lyrics, a real audio studio (slowed + reverb, bass boost), lyric video maker, friends, radio and podcasts. No sign-up.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"image":"https://ayqshi.github.io/sniplet/www/icons/og.jpg","screenshot":["https://ayqshi.github.io/sniplet/www/assets/mobile-home.jpg","https://ayqshi.github.io/sniplet/www/assets/desktop-home.jpg"],"featureList":["Synced lyrics","Slowed + reverb, bass boost, pitch and EQ","Lyric video maker with 4K export","4-hour personalised mixes","Offline listening","Friends listening together","Radio and podcasts"],"isAccessibleForFree":true}</script>
+  <meta name="sniplit-build" content="16d3ca144387">
 </head>
 <body>
+<div id="boot" aria-hidden="true" hidden><canvas></canvas><span class="boot-bar"><i></i></span></div>
+<script src="lib/logo3d.js"></script>
+<script>
+/* installed apps (home-screen web clip, Android, Windows/Mac) open on the 3D logo, and only reveal the app once it has
+   drawn and the pictures on screen have actually loaded — never a half-painted page */
+(function(){var b=document.getElementById('boot');var app=!!(window.sniplitAndroid||window.sniplitDesktop||navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||/[?&]boot\b/.test(location.search));if(!app||!b)return;
+  b.hidden=false;var stop=null;try{stop=window.SLogo3D&&SLogo3D.mount(b.querySelector('canvas'))}catch(e){}if(!stop)b.classList.add('flat');var t0=Date.now(),done=false;
+  function imgsReady(){var imgs=[].slice.call(document.querySelectorAll('#view img,#mini img,#side img,#np img')).filter(function(i){if(!i.src||i.complete)return false;var r=i.getBoundingClientRect();return r.width>0&&r.bottom>0&&r.top<innerHeight&&r.right>0&&r.left<innerWidth});return Promise.race([Promise.all(imgs.map(function(i){return i.decode?i.decode().catch(function(){}):new Promise(function(r){i.onload=i.onerror=r})})),new Promise(function(r){setTimeout(r,4500)})])}
+  function finish(){if(done)return;done=true;b.classList.add('out');setTimeout(function(){b.remove();if(stop)stop()},520)}
+  (function wait(){if(window.__snBooted){imgsReady().then(function(){setTimeout(finish,Math.max(0,900-(Date.now()-t0)))});return}if(Date.now()-t0>9000||document.getElementById('bootfail'))return finish();setTimeout(wait,60)})()})();
+</script>
 <div class="wco" aria-hidden="true"><b>sniplit</b></div>
 <div id="app">
   <aside id="side"></aside>
@@ -62,7 +74,17 @@ function show(){if(window.__snBooted||document.getElementById('bootfail'))return
     '<button id="bootfix" style="background:'+(old?'none;color:#fff;border:1px solid #444':'#fff;color:#000;border:0')+';padding:11px 20px;border-radius:99px;font:inherit;font-weight:600">Repair and reload</button>'+(errs.length?'<small style="color:#666;max-width:340px;word-break:break-word">'+errs[0].replace(/</g,'&lt;')+'</small>':'');
   document.body.appendChild(d);document.getElementById('bootfix').onclick=function(){var p=[];try{if(navigator.serviceWorker)p.push(navigator.serviceWorker.getRegistrations().then(function(r){return Promise.all(r.map(function(x){return x.unregister()}))}))}catch(e){}
     try{if(window.caches)p.push(caches.keys().then(function(k){return Promise.all(k.map(function(x){return caches.delete(x)}))}))}catch(e){}Promise.all(p).then(function(){location.reload()},function(){location.reload()})}}
-window.addEventListener('load',function(){setTimeout(show,errs.length?4000:12000)});setTimeout(show,20000)})();
+window.addEventListener('load',function(){setTimeout(show,errs.length?4000:12000)});
+// an upload that missed files: name them, so the fix is obvious
+window.addEventListener('load',function(){var P=window.__snParts||{},A=P['app.js'];
+  // index.html carries the build id it was made with; if app.js is older (or missing), it can't report on itself, so compare here
+  var BUILD=(document.querySelector('meta[name=sniplit-build]')||{}).content||'';
+  var old=A&&A.files?A.files.filter(function(f){return f!=='app.js'&&P[f]!==A.id}):[];
+  if(BUILD&&(!A||A.id!==BUILD)){if(old.indexOf('app.js')<0)old.unshift('app.js');}
+  if(!old.length)return;
+  var b=document.createElement('div');b.setAttribute('role','alert');b.style.cssText='position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:99998;background:#2a1606;color:#ffd9a8;border:1px solid #7a4a12;border-radius:14px;padding:12px 14px;font:13px/1.4 system-ui,sans-serif';
+  b.innerHTML='<b>Update incomplete.</b> These files on the site are from an older version — upload them again from the same build as app.js:<br><code style="color:#fff">'+old.join(', ')+'</code> <button style="float:right;background:none;border:0;color:#ffd9a8;font:inherit;cursor:pointer" onclick="this.parentNode.remove()">Dismiss</button>';
+  if(/^(localhost|127\.)/.test(location.hostname)||/[?&]debug/.test(location.search)||true)document.body.appendChild(b)});setTimeout(show,20000)})();
 </script>
 <script src="lib/zip.js"></script>
 <script src="config.js"></script>
@@ -73,13 +95,14 @@ window.addEventListener('load',function(){setTimeout(show,errs.length?4000:12000
 <script src="lib/sources.js"></script>
 <script src="lib/genres.js"></script>
 <script src="lib/avatars.js"></script>
-<script src="lib/analytics.js"></script>
+<script src="lib/stats.js"></script>
 <script src="lib/mp4mux.js"></script>
 <script src="lib/lsync.js"></script>
 <script src="lib/lpost.js"></script>
 <script src="lib/lcompose.js"></script>
 <script src="lib/lstudio.js"></script>
 <script src="lib/import.js"></script>
+<script src="lib/clean.js"></script>
 <script src="lib/social.js"></script>
 <script src="lib/license.js"></script>
 <script src="lib/legal.js"></script>
